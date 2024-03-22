@@ -19,6 +19,7 @@ import {
 import { Slider } from "./slider"
 import { TextareaAutosize } from "./textarea-autosize"
 import { WithTooltip } from "./with-tooltip"
+import { Button } from "./button"
 
 interface ChatSettingsFormProps {
   chatSettings: ChatSettings
@@ -33,7 +34,7 @@ export const ChatSettingsForm: FC<ChatSettingsFormProps> = ({
   useAdvancedDropdown = true,
   showTooltip = true
 }) => {
-  const { profile, models } = useContext(ChatbotUIContext)
+  const { profile, availableAIMaskModels } = useContext(ChatbotUIContext)
 
   if (!profile) return null
 
@@ -48,6 +49,20 @@ export const ChatSettingsForm: FC<ChatSettingsFormProps> = ({
             onChangeChatSettings({ ...chatSettings, model })
           }}
         />
+        {availableAIMaskModels.length === 0 && (
+          <a
+            href="https://chromewebstore.google.com/detail/lkfaajachdpegnlpikpdajccldcgfdde"
+            target="_blank"
+            className=""
+          >
+            <Button
+              variant="secondary"
+              className="mt-2 flex w-full items-center justify-center"
+            >
+              Install AI Mask&nbsp;for local inference !
+            </Button>
+          </a>
+        )}
       </div>
 
       <div className="space-y-1">

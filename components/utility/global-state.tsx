@@ -8,6 +8,7 @@ import { getWorkspaceImageFromStorage } from "@/db/storage/workspace-images"
 import { getWorkspacesByUserId } from "@/db/workspaces"
 import { convertBlobToBase64 } from "@/lib/blob-to-b64"
 import {
+  fetchAIMaskModels,
   fetchHostedModels,
   fetchOllamaModels,
   fetchOpenRouterModels
@@ -25,6 +26,7 @@ import {
 } from "@/types"
 import { AssistantImage } from "@/types/images/assistant-image"
 import { VALID_ENV_KEYS } from "@/types/valid-keys"
+import { AIMaskClient } from "@ai-mask/sdk"
 import { useRouter } from "next/navigation"
 import { FC, useEffect, useState } from "react"
 
@@ -54,6 +56,7 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
   const [envKeyMap, setEnvKeyMap] = useState<Record<string, VALID_ENV_KEYS>>({})
   const [availableHostedModels, setAvailableHostedModels] = useState<LLM[]>([])
   const [availableLocalModels, setAvailableLocalModels] = useState<LLM[]>([])
+  const [availableAIMaskModels, setAvailableAIMaskModels] = useState<LLM[]>([])
   const [availableOpenRouterModels, setAvailableOpenRouterModels] = useState<
     OpenRouterLLM[]
   >([])
@@ -149,6 +152,11 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
         if (!localModels) return
         setAvailableLocalModels(localModels)
       }
+
+      if (AIMaskClient.isExtensionAvailable()) {
+        const aiMaskModels = await fetchAIMaskModels()
+        setAvailableAIMaskModels(aiMaskModels)
+      }
     })()
   }, [])
 
@@ -231,6 +239,8 @@ export const GlobalState: FC<GlobalStateProps> = ({ children }) => {
         setEnvKeyMap,
         availableHostedModels,
         setAvailableHostedModels,
+        availableAIMaskModels,
+        setAvailableAIMaskModels,
         availableLocalModels,
         setAvailableLocalModels,
         availableOpenRouterModels,

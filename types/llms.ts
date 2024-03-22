@@ -1,4 +1,5 @@
 import { ModelProvider } from "."
+import { Model as AIMaskModel } from "@ai-mask/sdk"
 
 export type LLMID =
   | OpenAILLMID
@@ -7,6 +8,9 @@ export type LLMID =
   | MistralLLMID
   | GroqLLMID
   | PerplexityLLMID
+  | AIMaskLLMID
+
+export type AIMaskLLMID = AIMaskModel["id"]
 
 // OpenAI Models (UPDATED 1/29/24)
 export type OpenAILLMID =
